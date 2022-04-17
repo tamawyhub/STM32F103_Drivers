@@ -1,0 +1,59 @@
+######################################################################
+#  Project
+######################################################################
+
+
+
+OBJS = $(patsubst %.c, %.o, $(SRCFILES))
+DEPS = $(patsubst %.o, %.d, $(OBJS))
+
+CC = arm-none-eabi-gcc
+LD = arm-none-eabi-ld
+OBJ = arm-none-eabi-objcopy
+SZ = arm-none-eabi-size
+STL = st-flash
+
+
+MCAL_INCLUDE = ../MCAL/
+HAL_INCLUDE = ../HAL/
+LIB_INCLUDE = ../LIB/
+
+CCFLAGS = -I$(MCAL_INCLUDE) -I$(HAL_INCLUDE) -I$(LIB_INCLUDE) -mthumb  -mcpu=cortex-m3 -mfpu=auto -mfloat-abi=soft
+WFLAGS = -Wall
+LDFLAGS = -T$(LOAD_SCRIPT)
+#LDLIBS = -lnosys -L"/mnt/STM32/gcc-arm/5.4 2016q3/arm-none-eabi/lib" -lc
+#LDLIBS += -L"/mnt/STM32/gcc-arm/5.4 2016q3/lib/gcc/arm-none-eabi/5.4.1" -lgcc -lm
+LDLIBS = -lnosys -L"/opt/gcc-arm/arm-none-eabi/lib/thumb/v7/nofp" -lc -lm
+LDLIBS += -L"/opt/gcc-arm/lib/gcc/arm-none-eabi/10.3.1/thumb/v7/nofp" -lgcc
+DEPFLAGS = -MMD -MF
+
+
+all: $(target)
+
+%.o: %.c
+	$(CC) $(CCFLAGS) $(WFLAGS) -c -o $@ $(DEPFLAGS) $(@:.o=.d) $< 
+
+%.elf: $(OBJS) ../MCAL/STARTUP/startup.o
+	$(LD) $(LDFLAGS) $(LDLIBS) -o $@ $^ 
+
+%.bin: %.elf
+	$(OBJ) -O binary $< $@
+
+size: $(target:.bin=.elf)
+	$(SZ) $<
+clean:
+	rm -f *.d *.o *.elf
+	rm -f ./rtos/*.d ./rtos/*.o
+
+clobber:
+	rm -f *.d *.o *.elf $(target)
+	rm -f ./rtos/*.d ./rtos/*.o
+
+flash: $(target)
+	$(STL) erase
+	$(STL) write $(target) 0x08000000
+
+erase:
+	$(STL) erase
+
+-include $(DEPS)

@@ -1,0 +1,27 @@
+/*
+ * Author: Mohammed Hisham
+ * Date: 8 March 2020
+ * Version: 1.0
+ */
+
+
+#ifndef SEVEN_SEGMENT_CONFIG_H
+#define SEVEN_SEGMENT_CONFIG_H
+
+#include "SEVEN_SEGMENT_private.h"
+/* Options for SYSTICK_NUM_OF_DIGITS */
+
+#define SS_NUM_OF_DIGITS	4
+
+/*	Clock Source
+ *	SEVEN_SEGMENT_SYSTICK
+ *	SEVEN_SEGMENT_TIM2
+ *	SEVEN_SEGMENT_TIM3
+ *	SEVEN_SEGMENT_TIM4
+ *	SEVEN_SEGMENT_TIM5
+ */
+
+
+#define SEVEN_SEGMENT_CLK_SOURCE	SEVEN_SEGMENT_SYSTICK
+
+#endif
