@@ -1,8 +1,10 @@
 #ifndef I2C_PRIVATE
 #define I2C_PRIVATE
 
-#define I2C1_BASE
-#define I2C2_BASE
+#include <stdint.h>
+
+#define I2C1_BASE ((I2C* const) 0x40005400)
+#define I2C2_BASE ((I2C* const) 0x40005800)
 
 typedef struct i2c_t
 {

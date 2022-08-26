@@ -1,6 +1,8 @@
 #ifndef I2C_INTERFACE_H
 #define I2C_INTERFACE_H
 
+#include <stdint.h>
+
 typedef enum i2c_enum_t
 {
 	I2C1,

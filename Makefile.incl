@@ -34,7 +34,7 @@ all: $(target)
 	$(CC) $(CCFLAGS) $(WFLAGS) -c -o $@ $(DEPFLAGS) $(@:.o=.d) $< 
 
 %.elf: $(OBJS) ../MCAL/STARTUP/startup.o
-	$(LD) $(LDFLAGS) $(LDLIBS) -o $@ $^ 
+	$(LD) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
 %.bin: %.elf
 	$(OBJ) -O binary $< $@
