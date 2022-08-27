@@ -82,3 +82,36 @@ int I2C_slave_receive(I2C_CONFIG* i2c_config, uint8_t *buf)
 	return I2C_OK;
 }
 
+int I2C_slave_transmit(I2C_CONFIG* i2c_config, uint8_t byte)
+{
+	uint8_t l_i2c_id;
+	if(i2c_config == NULL)
+	{
+		return -1;
+	}
+	
+	l_i2c_id = i2c_config->i2c_id;
+	if(l_i2c_id > I2C_COUNT)
+	{
+		return I2C_INV;
+	}
+	
+	while( !GET_BIT(I2C_arr[l_i2c_id]->sr1, 1));
+	DEBUG_put_str("Address received");	
+	/* address received */
+	I2C_arr[l_i2c_id]->sr1;
+	I2C_arr[l_i2c_id]->sr2;
+
+	I2C_arr[l_i2c_id]->dr = byte;
+	while( !GET_BIT(I2C_arr[l_i2c_id]->sr1, 7));
+
+	/*Ack bit */
+	I2C_arr[l_i2c_id]->sr1;
+
+	if(GET_BIT(I2C_arr[l_i2c_id]->sr1, 10))
+	{
+		return I2C_NACK;
+	}
+	
+	return I2C_OK;
+}
