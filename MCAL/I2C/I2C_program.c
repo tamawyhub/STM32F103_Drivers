@@ -32,13 +32,23 @@ int I2C_init(I2C_CONFIG* i2c_config)
 	CLR_BIT(I2C_arr[l_i2c_id]->cr1, 15);
 
 	I2C_arr[l_i2c_id]->cr2 = 0x00;
-        I2C_arr[l_i2c_id]->cr2 |= 0x08;         //Set FREQ
+	if(i2c_config->apb_freq < 2)
+	{
+		return I2C_INV;
+	}
+        I2C_arr[l_i2c_id]->cr2 |= i2c_config->apb_freq; //Set FREQ
+
+	I2C_arr[l_i2c_id]->ccr = 0x00;
+	I2C_arr[l_i2c_id]->ccr |= i2c_config->ccr;	/* I2C clokc */
+
+	I2C_arr[l_i2c_id]->trise = 0x00;
+	I2C_arr[l_i2c_id]->trise |= i2c_config->trise;	/* I2C max. rise time */
 
 	SET_BIT(I2C_arr[l_i2c_id]->cr1, 0);	//Periph Enable
 	SET_BIT(I2C_arr[l_i2c_id]->cr1, 10);	//Ack Enabled
 	SET_BIT(I2C_arr[l_i2c_id]->cr1, 6);	//General Call Enabled
 
-	if(i2c_config->slave_addr1 > 127)
+	if(i2c_config->slave_addr1 > 127)	//Address1 in case of slave mode
 	{
 		return I2C_BAD_ADDR;
 	}
@@ -97,21 +107,77 @@ int I2C_slave_transmit(I2C_CONFIG* i2c_config, uint8_t byte)
 	}
 	
 	while( !GET_BIT(I2C_arr[l_i2c_id]->sr1, 1));
-	DEBUG_put_str("Address received");	
+
 	/* address received */
 	I2C_arr[l_i2c_id]->sr1;
 	I2C_arr[l_i2c_id]->sr2;
 
 	I2C_arr[l_i2c_id]->dr = byte;
-	while( !GET_BIT(I2C_arr[l_i2c_id]->sr1, 7));
+	while( !GET_BIT(I2C_arr[l_i2c_id]->sr1, 7) && !GET_BIT(I2C_arr[l_i2c_id]->sr1, 4));
 
-	/*Ack bit */
+	/*NAck or Stop  bit */
 	I2C_arr[l_i2c_id]->sr1;
+	I2C_arr[l_i2c_id]->cr1 |= 0x00;
 
 	if(GET_BIT(I2C_arr[l_i2c_id]->sr1, 10))
 	{
 		return I2C_NACK;
 	}
 	
+	return I2C_OK;
+}
+
+int I2C_master_transmit(I2C_CONFIG* i2c_config, uint8_t slave_addr, uint8_t byte)
+{
+	uint8_t l_i2c_id;
+        if(i2c_config == NULL)
+        {
+                return -1;
+        }
+
+        l_i2c_id = i2c_config->i2c_id;
+        if(l_i2c_id > I2C_COUNT)
+        {
+                return I2C_INV;
+        }
+
+	if(slave_addr > 127)
+        {
+                return I2C_BAD_ADDR;
+        }
+	
+	SET_BIT(I2C_arr[l_i2c_id]->cr1, 8);	/* Put in master mode */
+	while( !GET_BIT(I2C_arr[l_i2c_id]->sr1, 0));
+
+	/* Start condition sent */
+	I2C_arr[l_i2c_id]->sr1;
+	I2C_arr[l_i2c_id]->dr = slave_addr;
+	while( !GET_BIT(I2C_arr[l_i2c_id]->sr1, 1) && !GET_BIT(I2C_arr[l_i2c_id]->sr1, 10)); /* address ACKed/NACKed */
+
+	/* Address sent */
+	I2C_arr[l_i2c_id]->sr1;
+	I2C_arr[l_i2c_id]->sr2;
+
+	if(GET_BIT(I2C_arr[l_i2c_id]->sr1, 10))
+	{
+		CLR_BIT(I2C_arr[l_i2c_id]->sr1, 10);
+		SET_BIT(I2C_arr[l_i2c_id]->cr1, 9);
+		return I2C_ACK_FAILURE;
+	}
+
+	/* ACK received */
+	I2C_arr[l_i2c_id]->dr = byte;
+	while( !GET_BIT(I2C_arr[l_i2c_id]->sr1, 2) && !GET_BIT(I2C_arr[l_i2c_id]->sr1, 10)); /* Waith until ACK/NACK reception */
+	
+	/* Generate stop cond. */
+	SET_BIT(I2C_arr[l_i2c_id]->cr1, 9);
+
+	/* Data NACKed */
+	if(GET_BIT(I2C_arr[l_i2c_id]->sr1, 10))
+	{
+		CLR_BIT(I2C_arr[l_i2c_id]->sr1, 10);
+		return I2C_ACK_FAILURE;
+	}
+		
 	return I2C_OK;
 }

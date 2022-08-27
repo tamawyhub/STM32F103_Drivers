@@ -24,6 +24,9 @@ typedef enum i2c_errors_t
 
 typedef struct i2c_config_t
 {
+	uint16_t ccr;
+	uint8_t trise;
+	uint8_t apb_freq;
 	uint8_t slave_addr1;
 	uint8_t slave_addr2;	//COMBINED WITH ADDR1 in 10 bit mode
 	uint8_t interrupts;
@@ -35,5 +38,6 @@ typedef struct i2c_config_t
 int I2C_init(I2C_CONFIG* i2c_config);
 int I2C_slave_receive(I2C_CONFIG* i2c_config, uint8_t *buf);
 int I2C_slave_transmit(I2C_CONFIG* i2c_config, uint8_t byte);
+int I2C_master_transmit(I2C_CONFIG* i2c_config, uint8_t slave_addr, uint8_t byte);
 
 #endif
