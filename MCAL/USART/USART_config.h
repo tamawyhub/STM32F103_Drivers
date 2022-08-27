@@ -7,6 +7,6 @@
 #ifndef _USART_CONFIG_H
 #define _USART_CONFIG_H
 
-#define FLOAT_BAUDRATE	1	
+#define FLOAT_BAUDRATE	0	
 
 #endif
