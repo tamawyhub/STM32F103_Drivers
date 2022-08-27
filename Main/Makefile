@@ -9,4 +9,8 @@ SRCFILES = main.c ../MCAL/RCC/RCC_program.c ../MCAL/GPIO/GPIO_program.c ../MCAL/
 INCLUDE = ../include
 LOAD_SCRIPT = ../stm32f103c8t6.ld
 
+ifeq ($(DBG), 1)
+DBGFLAG = -DDEBUG
+endif
+
 include ../Makefile.incl

@@ -19,6 +19,7 @@ HAL_INCLUDE = ../HAL/
 LIB_INCLUDE = ../LIB/
 
 CCFLAGS = -I$(MCAL_INCLUDE) -I$(HAL_INCLUDE) -I$(LIB_INCLUDE) -mthumb  -mcpu=cortex-m3 -mfpu=auto -mfloat-abi=soft
+CCFLAGS += $(DBGFLAG)
 WFLAGS = -Wall
 LDFLAGS = -T$(LOAD_SCRIPT)
 #LDLIBS = -lnosys -L"/mnt/STM32/gcc-arm/5.4 2016q3/arm-none-eabi/lib" -lc
