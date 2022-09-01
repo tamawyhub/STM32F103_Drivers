@@ -181,3 +181,80 @@ int I2C_master_transmit(I2C_CONFIG* i2c_config, uint8_t slave_addr, uint8_t byte
 		
 	return I2C_OK;
 }
+
+int I2C_master_write(const I2C_CONFIG* i2c_config, uint8_t slave_addr, const void* buff, uint32_t buff_size, uint32_t* p_sent)
+{
+
+	uint8_t l_i2c_id;
+	uint32_t l_indx;
+	const char* l_buff;
+	int l_ret;
+
+        if(i2c_config == NULL || buff == NULL)
+        {
+                return -1;
+        }
+
+        l_i2c_id = i2c_config->i2c_id;
+        if(l_i2c_id > I2C_COUNT)
+        {
+                return I2C_INV;
+	}
+
+	if(slave_addr > 127)
+        {
+                return I2C_BAD_ADDR;
+        }
+
+	SET_BIT(I2C_arr[l_i2c_id]->cr1, 8);	/* Put in master mode */
+	while( !GET_BIT(I2C_arr[l_i2c_id]->sr1, 0));
+
+	/* Start condition sent */
+	I2C_arr[l_i2c_id]->sr1;
+	I2C_arr[l_i2c_id]->dr = slave_addr;
+	while( !GET_BIT(I2C_arr[l_i2c_id]->sr1, 1) && !GET_BIT(I2C_arr[l_i2c_id]->sr1, 10)); /* address ACKed/NACKed */
+
+	/* Address sent */
+	I2C_arr[l_i2c_id]->sr1;
+	I2C_arr[l_i2c_id]->sr2;
+
+	if(GET_BIT(I2C_arr[l_i2c_id]->sr1, 10))
+	{
+		CLR_BIT(I2C_arr[l_i2c_id]->sr1, 10);
+		SET_BIT(I2C_arr[l_i2c_id]->cr1, 9);
+		return I2C_ACK_FAILURE;
+	}
+
+	/* ACK received */
+	l_indx = 0;
+	l_buff = buff;
+	while(l_indx < buff_size && !GET_BIT(I2C_arr[l_i2c_id]->sr1, 10))
+	{
+		I2C_arr[l_i2c_id]->dr = l_buff[l_indx];
+		while(!GET_BIT(I2C_arr[l_i2c_id]->sr1, 7) && !GET_BIT(I2C_arr[l_i2c_id]->sr1, 10));
+		l_indx++;
+	}
+
+	/* Generate stop cond. But wait for BTF or AF first*/
+	while(!GET_BIT(I2C_arr[l_i2c_id]->sr1, 2) && !GET_BIT(I2C_arr[l_i2c_id]->sr1, 10));
+	SET_BIT(I2C_arr[l_i2c_id]->cr1, 9);
+
+	if(GET_BIT(I2C_arr[l_i2c_id]->sr1, 10))
+	{
+		/* NACK recieved */
+		CLR_BIT(I2C_arr[l_i2c_id]->sr1, 10);
+		l_indx--;
+		l_ret = I2C_ACK_FAILURE;
+	}
+	else
+	{
+		l_ret = I2C_OK;
+	}
+
+	if(p_sent)
+	{
+		*p_sent = l_indx;
+	}
+
+	return l_ret;
+}

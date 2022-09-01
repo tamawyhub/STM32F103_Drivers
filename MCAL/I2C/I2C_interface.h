@@ -39,5 +39,6 @@ int I2C_init(I2C_CONFIG* i2c_config);
 int I2C_slave_receive(I2C_CONFIG* i2c_config, uint8_t *buf);
 int I2C_slave_transmit(I2C_CONFIG* i2c_config, uint8_t byte);
 int I2C_master_transmit(I2C_CONFIG* i2c_config, uint8_t slave_addr, uint8_t byte);
+int I2C_master_write(const I2C_CONFIG* i2c_config, uint8_t slave_addr, const void* buff, uint32_t buff_size, uint32_t* p_sent);
 
 #endif
