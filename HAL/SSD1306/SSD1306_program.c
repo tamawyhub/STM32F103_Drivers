@@ -44,6 +44,29 @@ static int SSD1306_write_command(SSD1306_COMMAND* cmd)
 	return SSD1306_OK;
 }
 
+int SSD1306_write_data(const char* data, uint32_t data_size)
+{
+	char l_buff[SSD1306_PIXELS + 1];
+	int l_ret;
+
+	if(data == NULL)
+	{
+		return SSD1306_BUF_ERROR;
+	}
+	
+	if(data_size > SSD1306_PIXELS)
+	{
+		data_size = SSD1306_PIXELS;	
+	}
+
+	l_buff[0] = 0x40;
+	memcpy(l_buff + 1, data, data_size);
+
+	l_ret = I2C_master_write(&ssd1306_i2c_config, ssd1306_config.ssd1306_addr, l_buff, data_size + 1, NULL);
+
+	return (l_ret == I2C_OK) ? SSD1306_OK : SSD1306_DATA_FAILED;
+}
+
 int SSD1306_init(const SSD1306_CONFIG* p_ssd1306_config)
 {
 	int l_ret;
@@ -91,7 +114,7 @@ int SSD1306_init(const SSD1306_CONFIG* p_ssd1306_config)
 	l_ret |= SSD1306_set_col_addr(0x00, ssd1306_config.ssd1306_width - 1);
 	l_ret |= SSD1306_set_page_addr(0x00, (ssd1306_config.ssd1306_height >> 3) - 1);
 	l_ret |= SSD1306_set_normal_inverse(SSD1306_NORMAL_MODE);
-	l_ret |= SSD1306_use_ram_content(0);
+	l_ret |= SSD1306_use_ram_content(1);
 	l_ret |= SSD1306_disp_on();
 
 	if(l_ret != SSD1306_OK)

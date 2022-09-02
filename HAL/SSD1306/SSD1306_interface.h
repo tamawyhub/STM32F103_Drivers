@@ -22,6 +22,7 @@ typedef enum ssd1306_errors
 	SSD1306_BUF_ERROR,
 	SSD1306_CMD_FAILED,
 	SSD1306_CMD_INVALID,
+	SSD1306_DATA_FAILED,
 } SSD1306_ERRORS;
 
 typedef enum ssd1306_addr_modes
@@ -53,5 +54,6 @@ int SSD1306_use_ram_content(uint8_t mode);
 int SSD1306_set_normal_inverse(uint8_t mode);
 int SSD1306_disp_on(void);
 int SSD1306_disp_off(void);
+int SSD1306_write_data(const char* data, uint32_t data_size);
 
 #endif
