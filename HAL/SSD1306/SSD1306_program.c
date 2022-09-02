@@ -290,5 +290,24 @@ int SSD1306_disp_off(void)
 	return SSD1306_write_command(&cmd);
 }
 
+int SSD1306_flip_vertically(uint8_t flip)
+{
 
+	SSD1306_COMMAND cmd;
 
+	cmd.cmd_len = 1;
+	cmd.cmd_buf[0] = 0xC0 | ((flip & 0x01) << 3);
+
+	return SSD1306_write_command(&cmd);
+}
+
+int SSD1306_flip_horizontally(uint8_t flip)
+{
+
+	SSD1306_COMMAND cmd;
+
+	cmd.cmd_len = 1;
+	cmd.cmd_buf[0] = 0xA0 | (flip & 0x01);
+
+	return SSD1306_write_command(&cmd);
+}

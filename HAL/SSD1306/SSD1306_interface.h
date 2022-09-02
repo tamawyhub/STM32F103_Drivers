@@ -54,6 +54,8 @@ int SSD1306_use_ram_content(uint8_t mode);
 int SSD1306_set_normal_inverse(uint8_t mode);
 int SSD1306_disp_on(void);
 int SSD1306_disp_off(void);
+int SSD1306_flip_vertically(uint8_t flip);
+int SSD1306_flip_horizontally(uint8_t flip);
 int SSD1306_write_data(const char* data, uint32_t data_size);
 
 #endif
