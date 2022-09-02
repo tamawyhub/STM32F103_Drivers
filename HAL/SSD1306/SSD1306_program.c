@@ -3,6 +3,7 @@
 #include "SSD1306_config.h"
 
 #include "../MCAL/I2C/I2C_interface.h"
+#include "DEBUG/DEBUG.h"
 
 #include <stdint.h>
 #include <stddef.h>
@@ -10,7 +11,7 @@
 
 SSD1306_CONFIG ssd1306_config;
 
-//#if SSD1306_INTERFACE_MODE == SSD1306_USE_I2C
+#if SSD1306_INTERFACE_MODE == SSD1306_USE_I2C
 
 I2C_CONFIG ssd1306_i2c_config;
 
@@ -33,7 +34,7 @@ static int SSD1306_write_command(SSD1306_COMMAND* cmd)
 
 	memcpy(l_cmd_buf + 1, cmd->cmd_buf, cmd->cmd_len);
 
-	l_ret = I2C_master_write(&ssd1306_i2c_config, ssd1306_config.ssd1306_addr, l_cmd_buf, cmd->cmd_len, NULL);
+	l_ret = I2C_master_write(&ssd1306_i2c_config, ssd1306_config.ssd1306_addr, l_cmd_buf, cmd->cmd_len + 1, NULL);
 
 	if(l_ret != I2C_OK)
 	{
@@ -46,7 +47,7 @@ static int SSD1306_write_command(SSD1306_COMMAND* cmd)
 int SSD1306_init(const SSD1306_CONFIG* p_ssd1306_config)
 {
 	int l_ret;
-#if 0
+
 	if(p_ssd1306_config == NULL)
 	{
 		return SSD1306_INIT_FAILED;
@@ -56,7 +57,7 @@ int SSD1306_init(const SSD1306_CONFIG* p_ssd1306_config)
 	{
 		return SSD1306_BAD_DIMENSIONS;
 	}
-#endif
+
 	ssd1306_i2c_config.i2c_id = SSD1306_I2C_PORT;
 	ssd1306_i2c_config.apb_freq = 8;
 	ssd1306_i2c_config.ccr = 0x28;
@@ -101,12 +102,12 @@ int SSD1306_init(const SSD1306_CONFIG* p_ssd1306_config)
 	return SSD1306_OK;
 }
 
-//#elif SSD1306_INTERFACE_MODE == SSD1306_USE_SPI
+#elif SSD1306_INTERFACE_MODE == SSD1306_USE_SPI
 /* TODO */
 
-//#else
-//#error "You should define SSD1306_USE_I2C or SSD1306_USE_SPI"
-//#endif
+#else
+#error "You should define SSD1306_USE_I2C or SSD1306_USE_SPI"
+#endif
 
 int SSD1306_set_contrast(uint8_t contrast)
 {
