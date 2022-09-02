@@ -46,7 +46,7 @@ static int SSD1306_write_command(SSD1306_COMMAND* cmd)
 
 int SSD1306_write_data(const char* data, uint32_t data_size)
 {
-	char l_buff[SSD1306_PIXELS + 1];
+	char l_buff[SSD1306_GDDRAM_SIZE + 1];
 	int l_ret;
 
 	if(data == NULL)
@@ -54,9 +54,9 @@ int SSD1306_write_data(const char* data, uint32_t data_size)
 		return SSD1306_BUF_ERROR;
 	}
 	
-	if(data_size > SSD1306_PIXELS)
+	if(data_size > SSD1306_GDDRAM_SIZE)
 	{
-		data_size = SSD1306_PIXELS;	
+		data_size = SSD1306_GDDRAM_SIZE;	
 	}
 
 	l_buff[0] = 0x40;

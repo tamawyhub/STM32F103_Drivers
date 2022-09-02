@@ -6,6 +6,12 @@
 #define SSD1306_HEIGHT_64 64
 #define SSD1306_HEIGHT_32 32
 
+#define SSD1306_SEGMENTS 128
+#define SSD1306_PAGES   8
+
+#define SSD1306_GDDRAM_SIZE (SSD1306_SEGMENTS * SSD1306_PAGES)
+
+
 typedef struct ssd1306_config
 {
 	uint8_t ssd1306_addr;
