@@ -11,5 +11,6 @@
 
 #define OLED_FONT_USE_DEFAULT_5X7 1
 #define OLED_FONT_USE_DEFAULT_6X7 1
+#define OLED_FONT_USE_ARIAL_14	1
 
 #endif

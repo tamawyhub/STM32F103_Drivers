@@ -8,7 +8,9 @@
 typedef struct font
 {
 	uint16_t font_data_size;
-	const uint8_t *font_char_width;
+	uint8_t font_char_fixed_size;
+	uint8_t font_char_height;
+	const uint8_t *font_char_size;
 	const uint8_t *font_data;
 } FONT;
 

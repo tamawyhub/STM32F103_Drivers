@@ -35,6 +35,9 @@ typedef enum e_fonts
 #if OLED_FONT_USE_DEFAULT_6X7 == 1
         DEFAULT_6X7,
 #endif
+#if OLED_FONT_USE_ARIAL_14 == 1
+	ARIAL_14,
+#endif
         FONTS_USED
 } E_FONTS;
 
