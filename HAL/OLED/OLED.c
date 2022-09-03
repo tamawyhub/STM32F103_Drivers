@@ -1,5 +1,6 @@
 #include "OLED.h"
 #include "SSD1306/SSD1306_interface.h"
+#include "SSD1306/SSD1306_config.h"
 
 #include <stdint.h>
 #include <stddef.h>
@@ -24,12 +25,12 @@ int OLED_clear_disp(void)
 
 int OLED_set_pos(const OLED_CURSOR* cursor)
 {
-	int l_ret = -1;
+	int l_ret = OLED_FAILED;
 
-	if((cursor->xpos < OLED_WIDTH) && (cursor->ypos < OLED_HEIGHT))
+	if((cursor->xpos < OLED_COLS) && (cursor->ypos < OLED_LINES))
 	{
-		memcpy(&oled_cursor, &cursor, sizeof(OLED_CURSOR));
-		l_ret = 0;
+		memcpy(&oled_cursor, cursor, sizeof(OLED_CURSOR));
+		l_ret = OLED_OK;
 	}
 
 	return l_ret;
@@ -39,8 +40,28 @@ void OLED_get_pos(OLED_CURSOR* cursor)
 {
 	if(cursor != NULL)
 	{
-		memcpy(&cursor, &oled_cursor, sizeof(OLED_CURSOR));
+		memcpy(cursor, &oled_cursor, sizeof(OLED_CURSOR));
 	}
+}
+
+int OLED_check_boundaries(const OLED_CURSOR* cursor)
+{
+	if(cursor == NULL)
+	{
+		return OLED_FAILED;
+	}
+
+	if(cursor->xpos >= OLED_COLS - 5)
+	{
+		return OLED_COL_OUT;
+	}
+
+	if(cursor->ypos >= OLED_LINES)
+	{
+		return OLED_LINE_OUT;
+	}
+
+	return OLED_IN_BOUNDARY;
 }
 
 int OLED_init(void)
@@ -80,12 +101,23 @@ int OLED_init(void)
 	oled_cursor.xpos = 0;
 	oled_cursor.ypos = 0;
 
-	return 0;
+	return OLED_OK;
 }
 
-int OLED_check_line_boundary(const OLED_CURSOR* cursor)
+uint8_t* OLED_get_buff(void)
 {
-	return (cursor->xpos < OLED_COLS) ? OLED_IN_BOUNDARY : OLED_COL_OUT;
+	return oled_buff;
 }
 
+int OLED_update_buff(const uint8_t* copy_buff, const OLED_CURSOR* cursor, uint16_t size)
+{
+	if(copy_buff != NULL && cursor != NULL)
+	{
+		uint16_t pos = cursor->ypos * OLED_COLS + cursor->xpos;
+		memcpy(oled_buff + pos, copy_buff, size);
 
+		return OLED_OK;
+	}
+
+	return OLED_FAILED;
+}

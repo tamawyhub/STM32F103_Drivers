@@ -23,12 +23,32 @@ typedef enum oled_erros
 	OLED_FAILED,
 	OLED_IN_BOUNDARY,
 	OLED_COL_OUT,
+	OLED_LINE_OUT,
 } OLED_ERRORS;
+
+typedef enum e_fonts
+{
+#if OLED_FONT_USE_DEFAULT_5X7 == 1
+        DEFAULT_5X7,
+#endif
+
+#if OLED_FONT_USE_DEFAULT_6X7 == 1
+        DEFAULT_6X7,
+#endif
+        FONTS_USED
+} E_FONTS;
+
 
 int OLED_update_disp(void);
 int OLED_clear_disp(void);
 int OLED_set_pos(const OLED_CURSOR* cursor);
 void OLED_get_pos(OLED_CURSOR* cursor);
+int OLED_check_boundaries(const OLED_CURSOR* cursor);
 int OLED_init(void);
+uint8_t* OLED_get_buff(void);
+int OLED_update_buff(const uint8_t* copy_buff, const OLED_CURSOR* cursor, uint16_t size);
 
+/* Functions in OLED_font.c */
+int OLED_putc(uint8_t font_indx, char ch);
+int OLED_puts(uint8_t font_indx, const char* str);
 #endif
