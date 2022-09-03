@@ -33,6 +33,54 @@ static const FONT font_arr[] =
 		font_arial_14
 	},
 #endif
+#if OLED_FONT_USE_IAIN_5X7 == 1
+	{
+		sizeof(font_iain_5x7),
+		0, 1,
+		font_iain_5x7_char_size,
+		font_iain_5x7
+	},
+#endif
+#if OLED_FONT_USE_SYSTEM_5X7 == 1
+	{
+		sizeof(font_system_5x7),
+		1, 1,
+		font_system_5x7_char_size,
+		font_system_5x7
+	},
+#endif
+#if OLED_FONT_USE_STANG_5X7 == 1
+	{
+		sizeof(font_stang_5x7),
+		1, 1,
+		font_stang_5x7_char_size,
+		font_stang_5x7
+	},
+#endif
+#if OLED_FONT_USE_WENDY_3X5 == 1
+	{
+		sizeof(font_wendy_3x5),
+		1, 1,
+		font_wendy_3x5_char_size,
+		font_wendy_3x5
+	},
+#endif
+#if OLED_FONT_USE_CP437_8X8 == 1
+	{
+		sizeof(font_cp437_8x8),
+		1, 1,
+		font_cp437_8x8_char_size,
+		font_cp437_8x8
+	},
+#endif
+#if OLED_FONT_USE_FONT_8X8 == 1
+	{
+		sizeof(font_font_8x8),
+		1, 1,
+		font_font_8x8_char_size,
+		font_font_8x8
+	},
+#endif
 };
 
 static int OLED_find_var_size_char_indx(const FONT* font, uint8_t ch)
@@ -59,6 +107,7 @@ static int OLED_find_var_size_char_indx(const FONT* font, uint8_t ch)
 static int OLED_putchar(uint8_t font_indx, uint8_t ch)
 {
 	uint8_t ch_size;
+	uint8_t ch_width;
 	uint16_t ch_indx;
 	OLED_CURSOR l_cursor;
 	const FONT* l_font;
@@ -71,7 +120,7 @@ static int OLED_putchar(uint8_t font_indx, uint8_t ch)
 	if(ch == '\n')
 	{
 		OLED_get_pos(&l_cursor);
-		l_cursor.ypos++;
+		l_cursor.ypos += 1;
 		if(OLED_check_boundaries(&l_cursor) == OLED_LINE_OUT)
 		{
 			l_cursor.ypos = 0;
@@ -92,6 +141,7 @@ static int OLED_putchar(uint8_t font_indx, uint8_t ch)
 
 	l_font = &font_arr[font_indx];
 	ch_size = l_font->font_char_size[ch - 32];
+	ch_width = ch_size / l_font->font_char_height;
 	if(l_font->font_char_fixed_size)
 	{
 		ch_indx = (ch - 32) * ch_size;
@@ -102,15 +152,14 @@ static int OLED_putchar(uint8_t font_indx, uint8_t ch)
 	}
 
 	OLED_get_pos(&l_cursor);
-	l_cursor.xpos += ch_size;
-
+	l_cursor.xpos += ch_width;
 	switch(OLED_check_boundaries(&l_cursor))
 	{
 		case OLED_IN_BOUNDARY:
 			break;
 		case OLED_COL_OUT:
 			l_cursor.xpos = 0;
-			l_cursor.ypos++;
+			l_cursor.ypos += l_font->font_char_height;
 
 			if(OLED_check_boundaries(&l_cursor) == OLED_LINE_OUT)
 			{
@@ -121,8 +170,17 @@ static int OLED_putchar(uint8_t font_indx, uint8_t ch)
 		default:
 			return OLED_FAILED;
 	}
+	
+	for(uint8_t i = 0; i < l_font->font_char_height; i++)
+	{
+		OLED_get_pos(&l_cursor);		/* Restore cursor position */
+		l_cursor.ypos += i;
+		ch_indx += (i * ch_width);
+		OLED_update_buff(&(l_font->font_data[ch_indx]), &l_cursor, ch_width);
+	}
 
-	OLED_update_buff(&(l_font->font_data[ch_indx]), &l_cursor, ch_size);
+	OLED_get_pos(&l_cursor);		/* Restore cursor position */
+	l_cursor.xpos += ch_width;
 	if(OLED_set_pos(&l_cursor) != OLED_OK)
 	{
 		return OLED_FAILED;

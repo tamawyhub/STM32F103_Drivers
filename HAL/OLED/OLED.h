@@ -38,6 +38,24 @@ typedef enum e_fonts
 #if OLED_FONT_USE_ARIAL_14 == 1
 	ARIAL_14,
 #endif
+#if OLED_FONT_USE_IAIN_5X7 == 1
+	IAIN_5X7,
+#endif
+#if OLED_FONT_USE_SYSTEM_5X7 == 1
+	SYSTEM_5X7,
+#endif
+#if OLED_FONT_USE_STANG_5X7 == 1
+	STANG_5X7,
+#endif
+#if OLED_FONT_USE_WENDY_3X5 == 1
+	WENDY_3X5,
+#endif
+#if OLED_FONT_USE_CP437_8X8 == 1
+	CP437_8X8,
+#endif
+#if OLED_FONT_USE_FONT_8X8 == 1
+	FONT_8X8,
+#endif
         FONTS_USED
 } E_FONTS;
 
