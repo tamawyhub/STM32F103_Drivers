@@ -32,7 +32,7 @@ DEPFLAGS = -MMD -MF
 all: $(target)
 
 %.o: %.c
-	$(CC) $(CCFLAGS) $(WFLAGS) -c -o $@ $(DEPFLAGS) $(@:.o=.d) $< 
+	$(CC) $(CCFLAGS) $(WFLAGS) -c -g3 -ggdb -gdwarf-2 -o $@ $(DEPFLAGS) $(@:.o=.d) $< 
 
 %.elf: $(OBJS) ../MCAL/STARTUP/startup.o
 	$(LD) -o $@ $^ $(LDFLAGS) $(LDLIBS)
