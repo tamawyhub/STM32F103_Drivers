@@ -3,6 +3,7 @@
 
 
 #include "OLED/OLED_config.h"
+#include "../HAL/SSD1306/SSD1306_interface.h"
 
 #include <stdint.h>
 
@@ -81,7 +82,7 @@ int OLED_clear_disp(void);
 int OLED_set_pos(const OLED_CURSOR* cursor);
 void OLED_get_pos(OLED_CURSOR* cursor);
 int OLED_check_boundaries(const OLED_CURSOR* cursor);
-int OLED_init(void);
+int OLED_init(const I2C_CONFIG* i2c_config);
 uint8_t* OLED_get_buff(void);
 int OLED_update_buff(const uint8_t* copy_buff, const OLED_CURSOR* cursor, uint16_t size);
 

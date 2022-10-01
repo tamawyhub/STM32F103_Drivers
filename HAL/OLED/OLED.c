@@ -65,7 +65,7 @@ int OLED_check_boundaries(const OLED_CURSOR* cursor)
 	return OLED_IN_BOUNDARY;
 }
 
-int OLED_init(void)
+int OLED_init(const I2C_CONFIG* i2c_config)
 {
 	int l_ret;
 	SSD1306_CONFIG oled_driver;
@@ -74,6 +74,7 @@ int OLED_init(void)
 	oled_driver.ssd1306_width = OLED_WIDTH;
 #if SSD1306_INTERFACE_MODE == SSD1306_USE_I2C
 	oled_driver.ssd1306_addr = OLED_ADDR;
+	oled_driver.i2c_device = i2c_config;
 #endif
 	l_ret = SSD1306_init(&oled_driver);
 	if(l_ret != SSD1306_OK)

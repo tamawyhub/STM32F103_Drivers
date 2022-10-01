@@ -1,6 +1,8 @@
 #ifndef _SSD1306_INTERFACE_H
 #define _SSD1306_INTERFACE_H
 
+#include "../MCAL/I2C/I2C_interface.h"
+
 #include <stdint.h>
 
 #define SSD1306_HEIGHT_64 64
@@ -17,6 +19,7 @@ typedef struct ssd1306_config
 	uint8_t ssd1306_addr;
 	uint8_t ssd1306_height;
 	uint8_t ssd1306_width;
+	const I2C_CONFIG* i2c_device;
 } SSD1306_CONFIG;
 
 typedef enum ssd1306_errors

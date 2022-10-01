@@ -81,16 +81,7 @@ int SSD1306_init(const SSD1306_CONFIG* p_ssd1306_config)
 		return SSD1306_BAD_DIMENSIONS;
 	}
 
-	ssd1306_i2c_config.i2c_id = SSD1306_I2C_PORT;
-	ssd1306_i2c_config.apb_freq = 8;
-	ssd1306_i2c_config.ccr = 0x28;
-	ssd1306_i2c_config.trise = 0x09;
-
-	l_ret = I2C_init(&ssd1306_i2c_config);
-	if(l_ret != I2C_OK)
-	{
-		return SSD1306_INIT_FAILED;
-	}
+	memcpy(&ssd1306_i2c_config, p_ssd1306_config->i2c_device, sizeof(I2C_CONFIG));
 
 	/* Check device */
 	l_ret = I2C_master_transmit(&ssd1306_i2c_config, p_ssd1306_config->ssd1306_addr, 0x55);
