@@ -151,7 +151,7 @@ int I2C_master_transmit(I2C_CONFIG* i2c_config, uint8_t slave_addr, uint8_t byte
 
 	/* Start condition sent */
 	I2C_arr[l_i2c_id]->sr1;
-	I2C_arr[l_i2c_id]->dr = slave_addr;
+	I2C_arr[l_i2c_id]->dr = slave_addr << 1;
 	while( !GET_BIT(I2C_arr[l_i2c_id]->sr1, 1) && !GET_BIT(I2C_arr[l_i2c_id]->sr1, 10)); /* address ACKed/NACKed */
 
 	/* Address sent */
@@ -211,7 +211,7 @@ int I2C_master_write(const I2C_CONFIG* i2c_config, uint8_t slave_addr, const voi
 
 	/* Start condition sent */
 	I2C_arr[l_i2c_id]->sr1;
-	I2C_arr[l_i2c_id]->dr = slave_addr;
+	I2C_arr[l_i2c_id]->dr = slave_addr << 1;
 	while( !GET_BIT(I2C_arr[l_i2c_id]->sr1, 1) && !GET_BIT(I2C_arr[l_i2c_id]->sr1, 10)); /* address ACKed/NACKed */
 
 	/* Address sent */
@@ -257,4 +257,52 @@ int I2C_master_write(const I2C_CONFIG* i2c_config, uint8_t slave_addr, const voi
 	}
 
 	return l_ret;
+}
+
+int I2C_master_receive(I2C_CONFIG* i2c_config, uint8_t slave_addr, uint8_t* byte)
+{
+	uint8_t l_i2c_id;
+        if(i2c_config == NULL)
+        {
+                return -1;
+        }
+
+        l_i2c_id = i2c_config->i2c_id;
+        if(l_i2c_id > I2C_COUNT)
+        {
+                return I2C_INV;
+        }
+
+        if(slave_addr > 127)
+        {
+                return I2C_BAD_ADDR;
+        }
+
+        SET_BIT(I2C_arr[l_i2c_id]->cr1, 8);     /* Put in master mode */
+        while( !GET_BIT(I2C_arr[l_i2c_id]->sr1, 0));
+
+        /* Start condition sent */
+        I2C_arr[l_i2c_id]->sr1;
+        I2C_arr[l_i2c_id]->dr = (slave_addr << 1) | 0x01;
+        while( !GET_BIT(I2C_arr[l_i2c_id]->sr1, 1) && !GET_BIT(I2C_arr[l_i2c_id]->sr1, 10)); /* address ACKed/NACKed */
+
+        /* Address sent */
+        I2C_arr[l_i2c_id]->sr1;
+        I2C_arr[l_i2c_id]->sr2;
+
+        if(GET_BIT(I2C_arr[l_i2c_id]->sr1, 10))
+        {
+                CLR_BIT(I2C_arr[l_i2c_id]->sr1, 10);
+                SET_BIT(I2C_arr[l_i2c_id]->cr1, 9);
+                return I2C_ACK_FAILURE;
+        }
+
+	CLR_BIT(I2C_arr[l_i2c_id]->cr1, 10);
+	SET_BIT(I2C_arr[l_i2c_id]->cr1, 9);
+
+	while( !GET_BIT(I2C_arr[l_i2c_id]->sr1, 6));
+
+	*byte = I2C_arr[l_i2c_id]->dr;
+
+	return I2C_OK;
 }
