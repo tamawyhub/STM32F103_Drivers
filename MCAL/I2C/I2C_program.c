@@ -306,3 +306,76 @@ int I2C_master_receive(I2C_CONFIG* i2c_config, uint8_t slave_addr, uint8_t* byte
 
 	return I2C_OK;
 }
+
+int I2C_master_read(const I2C_CONFIG* i2c_config, uint8_t slave_addr, uint8_t* buf, uint32_t buf_size)
+{
+	uint8_t l_i2c_id;
+	uint32_t indx;
+
+        if(i2c_config == NULL || buf == NULL)
+        {
+                return -1;
+        }
+
+        l_i2c_id = i2c_config->i2c_id;
+        if(l_i2c_id > I2C_COUNT)
+        {
+                return I2C_INV;
+        }
+
+        if(slave_addr > 127)
+        {
+                return I2C_BAD_ADDR;
+        }
+
+        SET_BIT(I2C_arr[l_i2c_id]->cr1, 8);     /* Put in master mode */
+        while( !GET_BIT(I2C_arr[l_i2c_id]->sr1, 0));
+
+        /* Start condition sent */
+        I2C_arr[l_i2c_id]->sr1;
+        I2C_arr[l_i2c_id]->dr = (slave_addr << 1) | 0x01;
+        while( !GET_BIT(I2C_arr[l_i2c_id]->sr1, 1) && !GET_BIT(I2C_arr[l_i2c_id]->sr1, 10)); /* address ACKed/NACKed */
+
+        /* Address sent */
+        I2C_arr[l_i2c_id]->sr1;
+        I2C_arr[l_i2c_id]->sr2;
+	
+	if(GET_BIT(I2C_arr[l_i2c_id]->sr1, 10))
+        {
+                CLR_BIT(I2C_arr[l_i2c_id]->sr1, 10);
+                SET_BIT(I2C_arr[l_i2c_id]->cr1, 9);
+                return I2C_ACK_FAILURE;
+        }
+	
+	if(buf_size > 2)
+	{
+		for(indx = 0; indx < buf_size - 3; indx++)
+		{
+			while( !GET_BIT(I2C_arr[l_i2c_id]->sr1, 6));
+			buf[indx] = I2C_arr[l_i2c_id]->dr;
+		}
+		while( !GET_BIT(I2C_arr[l_i2c_id]->sr1, 2));	/* WAIT BTF = 1, STRETCH CLOCK LINE */
+		CLR_BIT(I2C_arr[l_i2c_id]->cr1, 10);
+		buf[indx] = I2C_arr[l_i2c_id]->dr;
+		SET_BIT(I2C_arr[l_i2c_id]->cr1, 9);
+		buf[indx + 1] = I2C_arr[l_i2c_id]->dr;
+		while( !GET_BIT(I2C_arr[l_i2c_id]->sr1, 6));
+		buf[indx + 2] = I2C_arr[l_i2c_id]->dr;
+	}
+	else if(buf_size == 2)
+	{
+		CLR_BIT(I2C_arr[l_i2c_id]->cr1, 10);
+		while( !GET_BIT(I2C_arr[l_i2c_id]->sr1, 2));
+		SET_BIT(I2C_arr[l_i2c_id]->cr1, 9);
+		buf[0] = I2C_arr[l_i2c_id]->dr;
+		while( !GET_BIT(I2C_arr[l_i2c_id]->sr1, 6));
+		buf[1] = I2C_arr[l_i2c_id]->dr;
+
+	}
+	else
+	{
+		return -1;
+	}
+
+	return I2C_OK;
+}
