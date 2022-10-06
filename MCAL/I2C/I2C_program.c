@@ -349,6 +349,7 @@ int I2C_master_read(const I2C_CONFIG* i2c_config, uint8_t slave_addr, uint8_t* b
 	
 	if(buf_size > 2)
 	{
+		SET_BIT(I2C_arr[l_i2c_id]->cr1, 10);
 		for(indx = 0; indx < buf_size - 3; indx++)
 		{
 			while( !GET_BIT(I2C_arr[l_i2c_id]->sr1, 6));
