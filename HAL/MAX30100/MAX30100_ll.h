@@ -18,6 +18,9 @@
 #define MAX30100_LL_HR_ENABLE		0x02
 #define MAX30100_LL_SPO2_ENABLE		0x03
 
+#define MAX30100_LL_ADC_RES_MAX		4
+#define MAX30100_LL_SAMPLE_RATE_MAX	8
+
 typedef enum max30100_reg_t
 {
 	MAX30100_INT_STATUS = 0x00,
@@ -41,27 +44,9 @@ enum max30100_ll_error
 	MAX30100_LL_FAILED
 };
 
-typedef enum max30100_ll_res
-{
-	MAX30100_LL_ADC_13,
-	MAX30100_LL_ADC_14,
-	MAX30100_LL_ADC_15,
-	MAX30100_LL_ADC_16,
-	MAX30100_LL_ADC_RES_MAX
-} MAX30100_LL_RESOLUTION;
+typedef uint8_t MAX30100_LL_RESOLUTION;
 
-typedef enum max30100_ll_rate
-{
-	MAX30100_LL_SAMPLE_RATE_50,
-	MAX30100_LL_SAMPLE_RATE_100,
-	MAX30100_LL_SAMPLE_RATE_167,
-	MAX30100_LL_SAMPLE_RATE_200,
-	MAX30100_LL_SAMPLE_RATE_400,
-	MAX30100_LL_SAMPLE_RATE_600,
-	MAX30100_LL_SAMPLE_RATE_800,
-	MAX30100_LL_SAMPLE_RATE_1000,
-	MAX30100_LL_SAMPLE_RATE_MAX,
-} MAX30100_LL_SAMPLE_RATE;
+typedef uint8_t MAX30100_LL_SAMPLE_RATE;
 
 typedef struct max30100_ll
 {
@@ -80,19 +65,15 @@ int MAX30100_LL_get_readptr(const MAX30100_LL* p_max30100, uint8_t* p_ptr);
 int MAX30100_LL_set_readptr(const MAX30100_LL* p_max30100, uint8_t ptr);
 int MAX30100_LL_get_ovf_counter(const MAX30100_LL* p_max30100, uint8_t* p_cnt);
 int MAX30100_LL_set_ovf_counter(const MAX30100_LL* p_max30100, uint8_t cnt);
-int MAX30100_LL_get_mode_config(const MAX30100_LL* p_max30100, uint8_t* p_mode);
-int MAX30100_LL_set_mode_config(const MAX30100_LL* p_max30100, uint8_t mode);
 int MAX30100_LL_standby(const MAX30100_LL* p_max30100, uint8_t enable);
 int MAX30100_LL_reset(const MAX30100_LL* p_max30100);
 int MAX30100_LL_temperature_mode(const MAX30100_LL* p_max30100, uint8_t enable);
 int MAX30100_LL_heart_rate_enable(const MAX30100_LL* p_max30100);
 int MAX30100_LL_spo2_enable(const MAX30100_LL* p_max30100);
-int MAX30100_LL_get_spo2_config(const MAX30100_LL* p_max30100, uint8_t* p_conf);
-int MAX30100_LL_set_spo2_config(const MAX30100_LL* p_max30100, uint8_t conf);
 int MAX30100_LL_set_adc_resolution(const MAX30100_LL* p_max30100, MAX30100_LL_RESOLUTION res);
 int MAX30100_LL_set_sample_rate(const MAX30100_LL* p_max30100, MAX30100_LL_SAMPLE_RATE  rate);
-int MAX30100_LL_get_led_config(const MAX30100_LL* p_max30100, uint8_t* p_led_current);
-int MAX30100_LL_set_led_config(const MAX30100_LL* p_max30100, uint8_t led_current);
 int MAX30100_LL_set_ir_current(const MAX30100_LL* p_max30100, uint8_t current);
 int MAX30100_LL_set_red_current(const MAX30100_LL* p_max30100, uint8_t current);
+int MAX30100_LL_read_fifo(const MAX30100_LL* p_max30100, uint8_t* buf, uint8_t buf_size);
+
 #endif

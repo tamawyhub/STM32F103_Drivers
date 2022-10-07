@@ -30,5 +30,7 @@ uint8_t MAX30100_QUEUE_empty(const MAX30100_QUEUE* queue);
 uint8_t MAX30100_QUEUE_full(const MAX30100_QUEUE* queue);
 int MAX30100_QUEUE_enqueue(MAX30100_QUEUE* queue, const void* data);
 int MAX30100_QUEUE_dequeue(MAX30100_QUEUE* queue, void* data);
+int MAX30100_QUEUE_drop(MAX30100_QUEUE* queue);
+int MAX30100_QUEUE_get_count(const MAX30100_QUEUE* queue);
 
 #endif

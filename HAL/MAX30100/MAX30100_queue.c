@@ -78,3 +78,35 @@ int MAX30100_QUEUE_dequeue(MAX30100_QUEUE* queue, void* data)
 
 	return MAX30100_QUEUE_OK;
 }
+
+int MAX30100_QUEUE_drop(MAX30100_QUEUE* queue)
+{
+	if(!queue)
+	{
+		return MAX30100_QUEUE_FAILED;
+	}
+
+	if(MAX30100_QUEUE_empty(queue))
+	{
+		return MAX30100_QUEUE_FAILED;
+	}
+
+	queue->head++;
+	if(queue->head >= MAX30100_QUEUE_SIZE)
+	{
+		queue->head = 0;
+	}
+	queue->count--;
+
+	return MAX30100_QUEUE_OK;
+}
+
+int MAX30100_QUEUE_get_count(const MAX30100_QUEUE* queue)
+{
+	if(queue)
+	{
+		return queue->count;
+	}
+
+	return 0;
+}
