@@ -14,6 +14,7 @@ typedef struct max30100_t
 	uint8_t red_current;
 	uint8_t hr_spo2_mode;
 	uint8_t enable_temp;
+	uint8_t interrupts;
 	uint8_t mode;
 	uint8_t shutdown;
 } MAX30100;

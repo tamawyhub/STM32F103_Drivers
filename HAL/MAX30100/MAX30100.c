@@ -73,6 +73,7 @@ static int MAX30100_get_available(const MAX30100* p_max30100, uint8_t* p_samples
 int MAX30100_init(MAX30100* p_max30100)
 {
 	const MAX30100_LL* p_max30100_ll;
+	uint8_t dummy;
 	int l_ret;
 
 	if( !p_max30100)
@@ -84,6 +85,8 @@ int MAX30100_init(MAX30100* p_max30100)
 #if 0
 	MAX30100_LL_reset(p_max30100_ll);
 #endif
+	l_ret = MAX30100_LL_get_pending(p_max30100_ll, &dummy);
+	l_ret = MAX30100_LL_set_interrupts(p_max30100_ll, p_max30100->interrupts);
 	l_ret = MAX30100_LL_temperature_mode(p_max30100_ll, p_max30100->enable_temp);
 	if(l_ret == MAX30100_LL_FAILED)
 	{
