@@ -200,10 +200,6 @@ int MAX30100_LL_temperature_mode(const MAX30100_LL* p_max30100, uint8_t enable)
                 }
 
                 MAX30100_LL_set_mode_config(p_max30100, l_mode);
-
-                l_mode = 0;
-                MAX30100_LL_get_mode_config(p_max30100, &l_mode);
-                l_ret = (l_mode & MAX30100_LL_TEMP_EN) ? MAX30100_LL_OK : MAX30100_LL_FAILED;
         }
 
         return l_ret;
@@ -380,3 +376,29 @@ int MAX30100_LL_set_red_current(const MAX30100_LL* p_max30100, uint8_t current)
         return l_ret;
 }
 
+int MAX30100_LL_read_fifo(const MAX30100_LL* p_max30100, uint8_t* buf, uint8_t buf_size)
+{
+	int l_ret;
+
+	if(!p_max30100 || !buf)
+	{
+		return MAX30100_LL_FAILED;
+	}
+
+	if(!buf_size)
+	{
+		return MAX30100_LL_OK;
+	}
+
+	if(I2C_master_transmit(p_max30100->i2c_device, p_max30100->addr, MAX30100_FIFO_DATA) != I2C_OK)
+	{
+		return MAX30100_LL_FAILED;
+	}
+
+	if(I2C_master_read(p_max30100->i2c_device, p_max30100->addr, buf, buf_size) != I2C_OK)
+	{
+		return MAX30100_LL_FAILED;
+	}
+
+	return MAX30100_LL_OK;
+}
