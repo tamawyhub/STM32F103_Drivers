@@ -2,6 +2,7 @@
 #define _GFX_FONT_H
 
 #include "GFX_config.h"
+#include "GFX.h"
 
 #include <stdint.h>
 
@@ -67,5 +68,7 @@ typedef enum e_fonts
         FONTS_USED
 } E_FONTS;
 
+int GFX_putc(GFX* gfx, uint8_t font_indx, uint8_t ch);
+int GFX_puts(GFX* gfx, uint8_t font_indx, const char* str);
 
 #endif

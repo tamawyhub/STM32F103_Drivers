@@ -1,9 +1,6 @@
 #ifndef _GFX_H
 #define _GFX_H
 
-#include "GFX_font.h"
-#include "GFX_config.h"
-
 #include <stdint.h>
 
 typedef struct GFX_cursor
@@ -30,7 +27,9 @@ typedef enum GFX_erros
 } GFX_ERRORS;
 
 void GFX_init(GFX* gfx, char* lcd_buffer, uint16_t width, uint16_t height);
-int GFX_putc(GFX* gfx, uint8_t font_indx, uint8_t ch);
-int GFX_puts(GFX* gfx, uint8_t font_indx, const char* str);
+int GFX_get_pos(GFX* gfx, GFX_CURSOR* cursor);
+int GFX_set_pos(GFX* gfx, GFX_CURSOR* cursor);
+int GFX_check_boundaries(const GFX* gfx, const GFX_CURSOR* cursor);
+int GFX_update_buff(GFX* gfx, char* buf, GFX_CURSOR* cursor, uint16_t len);
 
 #endif
