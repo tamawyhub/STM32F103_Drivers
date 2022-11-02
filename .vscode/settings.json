@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "i2c_interface.h": "c"
+        "i2c_interface.h": "c",
+        "stddef.h": "c"
     }
 }

@@ -58,5 +58,6 @@ enum pcd8544_disp_mode
 };
 
 int PCD8544_init(const PCD8544* pcd8544);
+int PCD8544_update(const PCD8544* pcd8544, char* buffer, uint16_t size);
 
 #endif

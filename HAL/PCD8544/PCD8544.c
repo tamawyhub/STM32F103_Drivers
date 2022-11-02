@@ -102,6 +102,22 @@ int PCD8544_init(const PCD8544* pcd8544)
     return l_ret;
 }
 
+int PCD8544_update(const PCD8544* pcd8544, char* buffer, uint16_t size)
+{
+    int l_ret = PCD8544_FAILED;
+    
+    if(pcd8544)
+    {
+        for(uint16_t idx = 0; idx < size; idx++)
+        {
+            PCD8544_send_data(pcd8544, buffer[idx]);
+        }
+
+        l_ret = PCD8544_OK;
+    }
+
+    return l_ret;
+}
 uint8_t PCD8544_function_set(uint8_t pupd, uint8_t mode, uint8_t extended)
 {
     uint8_t cmd = PCD8544_FUNC_SET;
@@ -111,7 +127,7 @@ uint8_t PCD8544_function_set(uint8_t pupd, uint8_t mode, uint8_t extended)
     return cmd;
 }
 
-uint8_t PCD8544_disp_control(uint8_t mode)
+static uint8_t PCD8544_disp_control(uint8_t mode)
 {
     uint8_t cmd = PCD8544_DISP_CTRL;
 
@@ -136,7 +152,7 @@ uint8_t PCD8544_disp_control(uint8_t mode)
     return cmd;
 }
 
-uint8_t PCD8544_set_y(uint8_t addr)
+static uint8_t PCD8544_set_y(uint8_t addr)
 {
     uint8_t cmd = 0x00;
 
@@ -148,7 +164,7 @@ uint8_t PCD8544_set_y(uint8_t addr)
     return cmd;
 }
 
-uint8_t PCD8544_set_x(uint8_t addr)
+static uint8_t PCD8544_set_x(uint8_t addr)
 {
     uint8_t cmd = 0x00;
 
@@ -160,7 +176,7 @@ uint8_t PCD8544_set_x(uint8_t addr)
     return cmd;
 }
 
-uint8_t PCD8544_temp_control(uint8_t temp)
+static uint8_t PCD8544_temp_control(uint8_t temp)
 {
     uint8_t cmd = PCD8544_TEMP_CTRL;
     if(temp <= 3)
@@ -171,7 +187,7 @@ uint8_t PCD8544_temp_control(uint8_t temp)
     return cmd;
 }
 
-uint8_t PCD8544_set_bias(uint8_t bias)
+static uint8_t PCD8544_set_bias(uint8_t bias)
 {
     uint8_t cmd = PCD8544_BIAS_SYS;
 
@@ -183,7 +199,7 @@ uint8_t PCD8544_set_bias(uint8_t bias)
     return cmd;
 }
 
-uint8_t PCD8544_set_vop(uint8_t vop)
+static uint8_t PCD8544_set_vop(uint8_t vop)
 {
     uint8_t cmd = PCD8544_SET_VOP;
 
@@ -192,7 +208,7 @@ uint8_t PCD8544_set_vop(uint8_t vop)
     return cmd;
 }
 
-void PCD8544_send_command(const PCD8544* pcd8544, uint8_t cmd)
+static void PCD8544_send_command(const PCD8544* pcd8544, uint8_t cmd)
 {
     if(pcd8544)
     {
@@ -204,7 +220,7 @@ void PCD8544_send_command(const PCD8544* pcd8544, uint8_t cmd)
     }
 }
 
-void PCD8544_send_data(const PCD8544* pcd8544, uint8_t data)
+static void PCD8544_send_data(const PCD8544* pcd8544, uint8_t data)
 {
     if(pcd8544)
     {
@@ -215,7 +231,7 @@ void PCD8544_send_data(const PCD8544* pcd8544, uint8_t data)
     }
 }
 
-void PCD8544_reset_set(const PCD8544* pcd8544)
+static void PCD8544_reset_set(const PCD8544* pcd8544)
 {
     if(pcd8544)
     {
@@ -223,7 +239,7 @@ void PCD8544_reset_set(const PCD8544* pcd8544)
     }
 }
 
-void PCD8544_reset_clear(const PCD8544* pcd8544)
+static void PCD8544_reset_clear(const PCD8544* pcd8544)
 {
     if(pcd8544)
     {
@@ -232,7 +248,7 @@ void PCD8544_reset_clear(const PCD8544* pcd8544)
 }
 
 
-void PCD8544_chip_enable_set(const PCD8544* pcd8544)
+static void PCD8544_chip_enable_set(const PCD8544* pcd8544)
 {
     if(pcd8544)
     {
@@ -240,7 +256,7 @@ void PCD8544_chip_enable_set(const PCD8544* pcd8544)
     }
 }
 
-void PCD8544_chip_enable_clear(const PCD8544* pcd8544)
+static void PCD8544_chip_enable_clear(const PCD8544* pcd8544)
 {
     if(pcd8544)
     {

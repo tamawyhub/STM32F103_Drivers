@@ -17,8 +17,10 @@ STL = st-flash
 MCAL_INCLUDE = ../MCAL/
 HAL_INCLUDE = ../HAL/
 LIB_INCLUDE = ../LIB/
+APPL_INCLUDE = ../APPLICATION/
 
-CCFLAGS = -I$(MCAL_INCLUDE) -I$(HAL_INCLUDE) -I$(LIB_INCLUDE) -mthumb  -mcpu=cortex-m3 -mfpu=auto -mfloat-abi=soft
+CCFLAGS = -I$(MCAL_INCLUDE) -I$(HAL_INCLUDE) -I$(LIB_INCLUDE) -I$(APPL_INCLUDE)
+CCFLAGS += -mthumb  -mcpu=cortex-m3 -mfpu=auto -mfloat-abi=soft
 CCFLAGS += $(DBGFLAG)
 WFLAGS = -Wall
 LDFLAGS = -T$(LOAD_SCRIPT)

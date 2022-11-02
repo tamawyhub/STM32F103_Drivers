@@ -1,10 +1,10 @@
-#ifndef _OLED_ASCII_H
-#define _OLED_ASCII_H
+#ifndef _GFX_ASCII_H
+#define _GFX_ASCII_H
 
-#include "OLED_config.h"
+#include "GFX_config.h"
 
 
-#if OLED_FONT_USE_DEFAULT_5X7 == 1
+#if GFX_FONT_USE_DEFAULT_5X7 == 1
 
 const uint8_t font_default_5x7[] = 
 {
@@ -122,7 +122,7 @@ const uint8_t font_default_5x7_char_size [] =
 };
 #endif
 
-#if OLED_FONT_USE_DEFAULT_6X7 == 1
+#if GFX_FONT_USE_DEFAULT_6X7 == 1
 const uint8_t font_default_6x7[] = 
 {
 	0x00, 0x00, 0x00, 0x00, 0x00,0x00,
@@ -238,7 +238,7 @@ const uint8_t font_default_6x7_char_size [] =
 };
 #endif
 
-#if OLED_FONT_USE_IAIN_5X7 == 1
+#if GFX_FONT_USE_IAIN_5X7 == 1
 const uint8_t font_iain_5x7 [] = 
 {
 	0x00,0x00,                               // 32 <space>
@@ -353,7 +353,7 @@ const uint8_t font_iain_5x7_char_size [] =
 };
 #endif
 
-#if OLED_FONT_USE_SYSTEM_5X7 == 1
+#if GFX_FONT_USE_SYSTEM_5X7 == 1
 const uint8_t font_system_5x7 [] = 
 {
 	0x00, 0x00, 0x00, 0x00, 0x00,// (space)
@@ -470,7 +470,7 @@ const uint8_t font_system_5x7_char_size [] =
 };
 #endif
 
-#if OLED_FONT_USE_STANG_5X7 == 1
+#if GFX_FONT_USE_STANG_5X7 == 1
 const uint8_t font_stang_5x7 [] = 
 {
 	0x00, 0x00, 0x00, 0x00, 0x00,// (space)
@@ -586,7 +586,7 @@ const uint8_t font_stang_5x7_char_size [] =
 };
 #endif
 
-#if OLED_FONT_USE_WENDY_3X5 == 1
+#if GFX_FONT_USE_WENDY_3X5 == 1
 const uint8_t font_wendy_3x5 [] = 
 {
 	0x00, 0x00, 0x00,      // (space)
@@ -702,7 +702,7 @@ const uint8_t font_wendy_3x5_char_size [] =
 };
 #endif 
 
-#if OLED_FONT_USE_CP437_8X8 == 1
+#if GFX_FONT_USE_CP437_8X8 == 1
 const uint8_t font_cp437_8x8 [] = 
 {
   0,   0,   0,   0,   0,   0,   0,   0, //' '
@@ -818,7 +818,7 @@ const uint8_t font_cp437_8x8_char_size [] =
 };
 #endif
 
-#if OLED_FONT_USE_FONT_8X8 == 1
+#if GFX_FONT_USE_FONT_8X8 == 1
 const uint8_t font_font_8x8 [] = 
 {
 	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,  // <space>
@@ -938,7 +938,7 @@ const uint8_t font_font_8x8_char_size [] =
 };
 #endif
 
-#if OLED_FONT_USE_ARIAL_14 == 1
+#if GFX_FONT_USE_ARIAL_14 == 1
 const uint8_t font_arial_14[] =
 {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
@@ -1054,7 +1054,7 @@ const uint8_t font_arial_14_char_size [] =
 };
 #endif
 
-#if OLED_FONT_USE_FIXED_BOLD == 1
+#if GFX_FONT_USE_FIXED_BOLD == 1
 const uint8_t font_fixed_bold [] = 
 {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
@@ -1169,7 +1169,7 @@ const uint8_t font_fixed_bold_char_size [] =
 };
 #endif
 
-#if OLED_FONT_USE_TIMES_NEW_ROMAN_ITALIC == 1
+#if GFX_FONT_USE_TIMES_NEW_ROMAN_ITALIC == 1
 const uint8_t font_times_new_roman_italic [] =
 {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
@@ -1284,7 +1284,7 @@ const uint8_t font_times_new_roman_italic_char_size [] =
 };
 #endif
 
-#if OLED_FONT_USE_COOPER_21 == 1
+#if GFX_FONT_USE_COOPER_21 == 1
 #endif
 
 #endif

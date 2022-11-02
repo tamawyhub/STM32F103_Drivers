@@ -6,7 +6,7 @@
 #include <stddef.h>
 #include <string.h>
 
-
+#if 0
 static uint8_t oled_buff[OLED_BUFF_SIZE];
 static OLED_CURSOR oled_cursor;
 
@@ -133,3 +133,5 @@ int OLED_update_buff(const uint8_t* copy_buff, const OLED_CURSOR* cursor, uint16
 
 	return OLED_FAILED;
 }
+
+#endif
