@@ -210,6 +210,7 @@ void GFX_init(GFX* gfx, char* lcd_buffer, uint16_t width, uint16_t height)
 	if(gfx && lcd_buffer)
 	{
 		gfx->buffer = lcd_buffer;
+		memset(gfx->buffer, 0, height * width);
 		memset(&gfx->cursor, 0, sizeof(GFX_CURSOR));
 		gfx->buffer_height = height;
 		gfx->buffer_width = width;
