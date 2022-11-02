@@ -32,6 +32,35 @@ int GFX_set_pos(GFX* gfx, GFX_CURSOR* cursor)
 	return l_ret;
 }
 
+int GFX_update_cursor(GFX* gfx, uint16_t height, uint16_t width)
+{
+    uint16_t l_ret = GFX_FAILED;
+
+    if(gfx)
+    {
+        if((gfx->cursor.xpos + width) < gfx->buffer_width)
+        {
+            gfx->cursor.xpos += width;
+        }
+        else    /* Wrapp around */
+        {
+            gfx->cursor.xpos = 0;
+        }
+
+        if((gfx->cursor.ypos + height) < gfx->buffer_height)
+        {
+            gfx->cursor.ypos += height;
+        }
+        else
+        {
+            gfx->cursor.ypos = 0;
+        }
+
+        l_ret = GFX_OK;
+    }
+
+    return l_ret;
+}
 int GFX_check_boundaries(const GFX* gfx, const GFX_CURSOR* cursor)
 {
 
@@ -52,6 +81,7 @@ int GFX_check_boundaries(const GFX* gfx, const GFX_CURSOR* cursor)
 
 	return GFX_IN_BOUNDARY;
 }
+
 
 int GFX_update_buff(GFX* gfx, char* buf, GFX_CURSOR* cursor, uint16_t len)
 {

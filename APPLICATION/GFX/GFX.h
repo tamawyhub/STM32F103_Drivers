@@ -29,6 +29,7 @@ typedef enum GFX_erros
 void GFX_init(GFX* gfx, char* lcd_buffer, uint16_t width, uint16_t height);
 int GFX_get_pos(GFX* gfx, GFX_CURSOR* cursor);
 int GFX_set_pos(GFX* gfx, GFX_CURSOR* cursor);
+int GFX_update_cursor(GFX* gfx, uint16_t height, uint16_t width);
 int GFX_check_boundaries(const GFX* gfx, const GFX_CURSOR* cursor);
 int GFX_update_buff(GFX* gfx, char* buf, GFX_CURSOR* cursor, uint16_t len);
 
