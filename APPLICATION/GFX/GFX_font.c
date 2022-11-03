@@ -231,7 +231,7 @@ int GFX_puts(GFX* gfx, uint8_t font_indx, const char* str)
 	return GFX_OK;
 }
 
-#if 0
+//#if 0
 int GFX_draw_bitmap(const GFX_BITMAP* bitmap, const GFX_CURSOR* cursor)
 {
 
@@ -250,9 +250,10 @@ int GFX_draw_bitmap(const GFX_BITMAP* bitmap, const GFX_CURSOR* cursor)
 		memcpy(&l_cursor, cursor, sizeof(GFX_CURSOR));
 	}
 
-	GFX_update_buff(bitmap->bitmap_data, &l_cursor, (uint16_t) bitmap->bitmap_height * bitmap->bitmap_width);
-	GFX_update_disp();
+	for (uint8_t i = 0; i < bitmap->bitmap_height; i++, l_cursor->ypos++)
+		GFX_update_buff(bitmap->bitmap_data+i*bitmap_bitmap_width, &l_cursor, bitmap->bitmap_width);
+	//GFX_update_disp();
 
 	return GFX_OK;
 }
-#endif
+//#endif

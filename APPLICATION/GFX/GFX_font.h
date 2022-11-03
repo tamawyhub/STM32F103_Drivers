@@ -17,14 +17,14 @@ typedef struct font
 	const uint8_t *font_data;
 } FONT;
 
-#if 0
+//#if 0
 typedef struct GFX_bitmap
 {
 	uint8_t bitmap_width;
 	uint8_t bitmap_height;
 	const uint8_t* bitmap_data;
 } GFX_BITMAP;
-#endif
+//#endif
 
 typedef enum e_fonts
 {
@@ -70,5 +70,6 @@ typedef enum e_fonts
 
 int GFX_putc(GFX* gfx, uint8_t font_indx, uint8_t ch);
 int GFX_puts(GFX* gfx, uint8_t font_indx, const char* str);
+int GFX_draw_bitmap(const GFX_BITMAP* bitmap, const GFX_CURSOR* cursor);
 
 #endif
