@@ -19,7 +19,7 @@ int GFX_draw_bitmap(const GFX_BITMAP* bitmap, const GFX_CURSOR* cursor)
 		memcpy(&l_cursor, cursor, sizeof(GFX_CURSOR));
 	}
 
-	for (uint8_t i = 0; i < bitmap->bitmap_height; i++, l_cursor->ypos++)
+	for (gfx_size_t i = 0; i < bitmap->bitmap_height; i++, l_cursor->ypos++)
 		GFX_update_buff(bitmap->bitmap_data+i*bitmap_bitmap_width, &l_cursor, bitmap->bitmap_width);
 	//GFX_update_disp();
 
