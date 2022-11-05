@@ -38,6 +38,6 @@ void GFX_init(GFX* gfx, char* lcd_buffer, gfx_size_t width, gfx_size_t height);
 int GFX_get_pos(GFX* gfx, GFX_CURSOR* cursor);
 int GFX_set_pos(GFX* gfx, GFX_CURSOR* cursor);
 int GFX_check_boundaries(const GFX* gfx, const GFX_CURSOR* cursor);
-int GFX_update_buff(GFX* gfx, char* buf, GFX_CURSOR* cursor, gfx_size_t len, GFX_UMETHOD umethod);
+int GFX_update_buff(GFX* gfx, const uint8_t* buf, GFX_CURSOR* cursor, gfx_size_t len, GFX_UMETHOD umethod);
 
 #endif

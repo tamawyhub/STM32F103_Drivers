@@ -53,7 +53,7 @@ int GFX_check_boundaries(const GFX* gfx, const GFX_CURSOR* cursor)
 	return GFX_IN_BOUNDARY;
 }
 
-int GFX_update_buff(GFX* gfx, char* buf, GFX_CURSOR* cursor, gfx_size_t len, GFX_UMETHOD umethod)
+int GFX_update_buff(GFX* gfx, const uint8_t* buf, GFX_CURSOR* cursor, gfx_size_t len, GFX_UMETHOD umethod)
 {
 	gfx_size_t start_pos;
 	gfx_size_t end_pos;

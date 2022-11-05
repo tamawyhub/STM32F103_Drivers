@@ -1,10 +1,11 @@
+#include <stddef.h>
 #include "GFX_shapes.h"
 
 int gfx_draw_point (GFX *gfx, const GFX_POINT *point){
 	if (gfx==NULL || point == NULL) return GFX_FAILED;
-	CURSOR cur = {point->x, (point->y) >> 3};
+	GFX_CURSOR cur = {point->x, (point->y) >> 3};
 	char dummy = 1 << ((point->y) % 8);
-	return GFX_update_buffer(gfx,&dummy,cur,1,GFX_UMETHOD_OR);
+	return GFX_update_buff(gfx,&dummy,&cur,1,GFX_UMETHOD_OR);
 }
 int gfx_draw_line_segment (GFX *gfx, const GFX_LINE_SEGMENT *line_segment){
 	//see http://members.chello.at/~easyfilter/Bresenham.pdf (8.1 thick lines)
@@ -31,7 +32,7 @@ int gfx_draw_line_segment (GFX *gfx, const GFX_LINE_SEGMENT *line_segment){
 	 	}
 	 	if (2*e2 <= dy) { /* y step */
 	 		for (e2 = dx-e2; e2 < comp && (x1 != pt.x || dx < dy); e2 += dy)
-	 			if ( (pt.x+=sx, gfx_draw_point(gfx, &pt)) == GFX_FAILED;
+	 			if ( (pt.x+=sx, gfx_draw_point(gfx, &pt)) == GFX_FAILED) return GFX_FAILED;
 	 		if (y0 == y1) break;
 	 		err += dx; y0 += sy;
 	 	}
@@ -45,7 +46,7 @@ int gfx_draw_poly (GFX *gfx, const GFX_POLY *poly){
 	GFX_POINT *vertices = poly->vertices;
 	if (vertices == NULL) return GFX_FAILED;
 	GFX_LINE_SEGMENT edge = {.s_point = vertices[0], .e_point = vertices[0], .thickness = poly->thickness};
-	for (uint8_t i = 1; i < poly->n_vertices, i++){
+	for (uint8_t i = 1; i < poly->n_vertices; i++){
 		edge.e_point = vertices[i];
 		if (gfx_draw_line_segment(gfx,&edge) == GFX_FAILED) return GFX_FAILED;
 		edge.s_point = edge.e_point;

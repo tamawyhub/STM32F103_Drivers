@@ -201,7 +201,7 @@ int GFX_putc(GFX* gfx, uint8_t font_indx, uint8_t ch)
 	{
 		l_cursor.ypos += i;
 		ch_indx += ch_width;
-		GFX_update_buff(gfx, &(l_font->font_data[ch_indx]), &l_cursor, ch_width);
+		GFX_update_buff(gfx, &(l_font->font_data[ch_indx]), &l_cursor, ch_width,GFX_UMETHOD_COPY);
 		l_cursor.ypos -= i;
 	}
 	
