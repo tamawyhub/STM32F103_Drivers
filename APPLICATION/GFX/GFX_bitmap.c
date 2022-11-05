@@ -3,27 +3,36 @@
 #include "GFX.h"
 #include "GFX_bitmap.h"
 
-int GFX_draw_bitmap(GFX *gfx, const GFX_BITMAP* bitmap, const GFX_CURSOR* cursor)
+void GFX_BITMAP_draw_bitmap(GFX* gfx, const GFX_BITMAP* bitmap)
 {
+    uint16_t l_width, l_height;
+    GFX_CURSOR l_cursor;
 
-	GFX_CURSOR l_cursor;
-	if(bitmap == NULL || gfx == NULL)
-	{
-		return GFX_FAILED;
-	}
+    if(gfx && bitmap)
+    {
+        /* Check boundaries */
+        if((bitmap->x_pos + bitmap->width) > gfx->buffer_width)
+        {
+            l_width = gfx->buffer_width - bitmap->x_pos;
+        }
+        else
+        {
+            l_width = bitmap->width;
+        }
 
-	if(cursor == NULL)
-	{
-		GFX_get_pos(gfx, &l_cursor);
-	}
-	else
-	{
-		memcpy(&l_cursor, cursor, sizeof(GFX_CURSOR));
-	}
+        if((bitmap->y_pos + bitmap->height) > gfx->buffer_height)
+        {
+            l_height = gfx->buffer_height - bitmap->y_pos;
+        }
+        else
+        {
+            l_height = bitmap->height;
+        }
 
-	for (gfx_size_t i = 0; i < bitmap->bitmap_height; i++, l_cursor.ypos++)
-		GFX_update_buff(gfx, bitmap->bitmap_data+i*bitmap->bitmap_width, &l_cursor, bitmap->bitmap_width,GFX_UMETHOD_COPY);
-	//GFX_update_disp();
+        l_cursor.xpos = bitmap->x_pos;
+        l_cursor.ypos = bitmap->y_pos;
 
-	return GFX_OK;
+        GFX_update_cursor(gfx, l_height, l_width);
+        GFX_update_buff(gfx, bitmap->bitmap_buffer, &l_cursor, l_width * l_height);
+    }
 }
