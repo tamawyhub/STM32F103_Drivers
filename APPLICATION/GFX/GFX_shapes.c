@@ -23,7 +23,7 @@ int gfx_draw_line_segment (GFX *gfx, const GFX_LINE_SEGMENT *line_segment){
 	GFX_POINT pt;
 	 for (; ; ) { /* pixel loop */
 	 	if (gfx_draw_point(gfx,&(line_segment->s_point)) == GFX_FAILED) return GFX_FAILED;
-	 	e2 = err; pt.x = x0;
+	 	e2 = err; pt.x = x0, pt.y = y0;
 	 	if (2*e2 >= -dx) { /* x step */
 	 		for (e2 += dy, pt.y = y0; e2 < comp && (y1 != pt.y || dx > dy); e2 += dx)
 	 			if ( (pt.y+=sy, gfx_draw_point(gfx, &pt)) == GFX_FAILED) return GFX_FAILED;

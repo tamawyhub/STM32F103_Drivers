@@ -102,6 +102,8 @@ int GFX_update_buff(GFX* gfx, const uint8_t* buf, GFX_CURSOR* cursor, gfx_size_t
 	end_pos = start_pos + len;
 	buffer_size = gfx->buffer_height * gfx->buffer_width;
 
+	if (start_pos >= buffer_size)
+		return GFX_OK;
 	if(end_pos > buffer_size)
 	{
 		len = buffer_size - start_pos;
