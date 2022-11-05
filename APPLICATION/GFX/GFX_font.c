@@ -200,8 +200,8 @@ int GFX_putc(GFX* gfx, uint8_t font_indx, uint8_t ch)
 	for(uint8_t i = 0; i < l_font->font_char_height; i++)
 	{
 		l_cursor.ypos += i;
-		ch_indx += (i * ch_width);
-		GFX_update_buff(gfx, &(l_font->font_data[ch_indx]), &l_cursor, ch_width);
+		ch_indx += ch_width;
+		GFX_update_buff(gfx, &(l_font->font_data[ch_indx]), &l_cursor, ch_width,GFX_UMETHOD_COPY);
 		l_cursor.ypos -= i;
 	}
 	
@@ -231,28 +231,4 @@ int GFX_puts(GFX* gfx, uint8_t font_indx, const char* str)
 	return GFX_OK;
 }
 
-#if 0
-int GFX_draw_bitmap(const GFX_BITMAP* bitmap, const GFX_CURSOR* cursor)
-{
 
-	GFX_CURSOR l_cursor;
-	if(bitmap == NULL)
-	{
-		return GFX_FAILED;
-	}
-
-	if(cursor == NULL)
-	{
-		GFX_get_pos(&l_cursor);
-	}
-	else
-	{
-		memcpy(&l_cursor, cursor, sizeof(GFX_CURSOR));
-	}
-
-	GFX_update_buff(bitmap->bitmap_data, &l_cursor, (uint16_t) bitmap->bitmap_height * bitmap->bitmap_width);
-	GFX_update_disp();
-
-	return GFX_OK;
-}
-#endif

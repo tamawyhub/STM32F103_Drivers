@@ -17,15 +17,6 @@ typedef struct font
 	const uint8_t *font_data;
 } FONT;
 
-#if 0
-typedef struct GFX_bitmap
-{
-	uint8_t bitmap_width;
-	uint8_t bitmap_height;
-	const uint8_t* bitmap_data;
-} GFX_BITMAP;
-#endif
-
 typedef enum e_fonts
 {
 #if GFX_FONT_USE_DEFAULT_5X7 == 1

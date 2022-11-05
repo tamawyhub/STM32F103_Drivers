@@ -1,3 +1,6 @@
+#include <stddef.h>
+#include <string.h>
+#include "GFX.h"
 #include "GFX_bitmap.h"
 
 void GFX_BITMAP_draw_bitmap(GFX* gfx, const GFX_BITMAP* bitmap)

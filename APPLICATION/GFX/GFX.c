@@ -82,12 +82,11 @@ int GFX_check_boundaries(const GFX* gfx, const GFX_CURSOR* cursor)
 	return GFX_IN_BOUNDARY;
 }
 
-
-int GFX_update_buff(GFX* gfx, char* buf, GFX_CURSOR* cursor, uint16_t len)
+int GFX_update_buff(GFX* gfx, const uint8_t* buf, GFX_CURSOR* cursor, gfx_size_t len, GFX_UMETHOD umethod)
 {
-	uint16_t start_pos;
-	uint16_t end_pos;
-	uint16_t buffer_size;
+	gfx_size_t start_pos;
+	gfx_size_t end_pos;
+	gfx_size_t buffer_size;
 
 	if(gfx == NULL || cursor == NULL || buf == NULL)
 	{
@@ -108,12 +107,18 @@ int GFX_update_buff(GFX* gfx, char* buf, GFX_CURSOR* cursor, uint16_t len)
 		len = buffer_size - start_pos;
 	}
 	
-	memcpy(gfx->buffer + start_pos, buf, len);
+	if (umethod == GFX_UMETHOD_COPY) memcpy(gfx->buffer + start_pos, buf, len);
+	else if (umethod == GFX_UMETHOD_OR)
+	{
+		for (gfx_size_t i = 0; i < len; i++)
+			*(gfx->buffer + (start_pos + i)) |= *(buf + i);
+	}
+	else return GFX_FAILED;
 
 	return GFX_OK;
 }
 
-void GFX_init(GFX* gfx, char* lcd_buffer, uint16_t width, uint16_t height)
+void GFX_init(GFX* gfx, char* lcd_buffer, gfx_size_t width, gfx_size_t height)
 {
 	if(gfx && lcd_buffer)
 	{
